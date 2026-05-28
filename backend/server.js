@@ -89,7 +89,7 @@ const e10 = {
 
 equipamentos.push(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
 
-/* Endpoint para listar todos os equipamentos (O QUE JÁ EXISTIA) */
+/* Endpoint para listar todos os equipamentos */
 app.get('/equipamentos', (req, res) => {
     const { status, tipo, busca} = req.query;
     let resultado = equipamentos;
@@ -101,7 +101,7 @@ app.get('/equipamentos', (req, res) => {
     res.json(resultado);
 }); 
 
-/* 1. Rota GET por ID */
+/* 1. GET por ID */
 app.get('/equipamentos/:id', (req, res) => {
     const idProcurado = parseInt(req.params.id);
     const equipamentoEncontrado = equipamentos.find(e => e.id === idProcurado);
@@ -112,30 +112,6 @@ app.get('/equipamentos/:id', (req, res) => {
 
     res.json(equipamentoEncontrado);
 });
-
-// tota  de criação (post /equipamentos)
-app.post('/equipamentos', (req, res) => {
-    const { nome, status, tipo, busca, descricao } = req.body;
-
-    // Validação: Se não vier nome ou tipo, retorna status 400
-    if (!nome || !tipo){
-        return res.status(400).json({ mensagem: "Erro: Os campos 'nome' e 'tipo' são obrigatórios"});
-    }
-
-    // validação de status permitidos
-    const statusPermitidos = ['disponivel', 'emprestado', 'manutencao'];
-    if (!statusPermitidos.includes(status)){
-        return res.status(400).json({ mensagem: "Erro: Ostatos deve ser 'disponivel', 'emprestado' ou 'manutencao' "});
-    }
-
-    const novoId = Math.max(0, ...equipamentos.map(e => e.id)) + 1;
-    // criar novo objeto
-    
-
-    
-
-    res.json(resultado);
-}); 
 
 const PORT = 3000;
 app.listen(PORT, () => {
