@@ -113,6 +113,77 @@ app.get('/equipamentos/:id', (req, res) => {
     res.json(equipamentoEncontrado);
 });
 
+// tota  de criação (post /equipamentos)
+app.post('/equipamentos', (req, res) => {
+    const { nome, status, tipo, busca, descricao } = req.body;
+
+    // Validação: Se não vier nome ou tipo, retorna status 400
+    if (!nome || !tipo){
+        return res.status(400).json({ mensagem: "Erro: Os campos 'nome' e 'tipo' são obrigatórios"});
+    }
+
+    // validação de status permitidos
+    const statusPermitidos = ['disponivel', 'emprestado', 'manutencao'];
+    if (!statusPermitidos.includes(status)){
+        return res.status(400).json({ mensagem: "Erro: O statos deve ser 'disponivel', 'emprestado' ou 'manutencao' "});
+    }
+
+    const novoId = Math.max(0, ...equipamentos.map(e => e.id)) + 1;
+
+    // criar novo objeto
+    const novoEquipamento = {
+        id: novoId,
+        nome: nome,
+        tipo: tipo,
+        status: status,
+        descricao: descricao || ""
+    };
+
+    //adiciona o objeto no array 
+    equipamentos.push(novoEquipamento);
+
+    //  responde com status 201 (Created) e com o objeto criado
+    res.status(201).json(novoEquipamento);
+});
+
+//atualização de equipamentos
+app.put('/equipamentos/:id', (req, res) => {
+    const idProcurado = parseInt(req.params.id);
+    const { nome, tipo, status, descricao } = req.body;
+
+    //encontra o indice do eqipamento no array
+    const index = equipamentos.findIndex(e => e.id === idProcurado);
+
+    //se for -1, não existe
+    if (index === -1){
+        return res.status(404).json({ mensagem: "Equipamento não encontrado"})
+    }
+
+    //validação campos nome e tipo
+    if (!nome || !tipo) {
+        return res.status(400).json({ mensagem: "Erro: Os campos 'nome' e 'tipo' são obrigatórios." });
+    }
+
+    // validação de status
+    const statusPermitidos = ['disponivel', 'emprestado', 'manutencao'];
+    if (!statusPermitidos.includes(status)) {
+        return res.status(400).json({ mensagem: "Erro: O status deve ser 'disponivel', 'emprestado' ou 'manutencao'." });
+    }
+
+    // atualiza o objeto
+    equipamentos[index] = {
+        id: idProcurado, //id original
+        nome: nome,
+        tipo: tipo,
+        status: status,
+        descricao: descricao || ""
+    };
+
+    //retorna objeto atualizado
+    res.json(equipamentos[index]);
+});
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
