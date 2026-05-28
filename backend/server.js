@@ -184,6 +184,23 @@ app.put('/equipamentos/:id', (req, res) => {
 });
 
 
+//delete para equipamentos
+app.delete('/equipamentos/:id', (req, res) => {
+    const idProcurado = parseInt(req.params.id);
+
+     //encontra o indice do eqipamento no array (igual na atualização)
+    const index = equipamentos.findIndex(e => e.id === idProcurado);
+    if (index === -1) {
+        return res.status(404).json({ mensagem: "Equipamento não encontrado para exclusão." });
+    }
+
+    //remover o elemento na posição encontrada
+    equipamentos.splice(index, 1);
+
+    // status 204 No Content (exclusão com sucesso)
+    res.status(204).send();
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
