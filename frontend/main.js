@@ -26,6 +26,10 @@ const getEquipamentos = async () => {
             <td>${e.tipo}</td>
             <td>${e.status}</td>
             <td>${e.descricao}</td>
+            <td>
+                <button onclick="preencherFormulario(${e.id})" style="background-color: #28a745; margin-right: 5px; cursor: pointer;">Editar</button>
+                <button onclick="deletarEquipamento(${e.id})" style="background-color: #dc3545; cursor: pointer;">Excluir</button>
+            </td>
         `;
         tbody.appendChild(tr);
     }
