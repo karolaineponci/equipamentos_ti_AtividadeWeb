@@ -60,4 +60,49 @@ const deletarEquipamento = async (id) => {
     }
 }
 
+// buscar e preencher formulario
+const preencherFormulario = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/equipamentos/${id}`);
+
+        if (response.ok) {
+            const equipamento = await response.json();
+
+            document.querySelector('#equipamento-id').value = equipamento.id;
+            document.querySelector('#cadastro-nome').value = equipamento.nome;
+            document.querySelector('#cadastro-tipo').value = equipamento.tipo;
+            document.querySelector('#cadastro-status').value = equipamento.status;
+            document.querySelector('#cadastro-descricao').value = equipamento.descricao;
+
+            document.querySelector('#btn-salvar').innerText = "Atualizar";
+
+            document.querySelector('#btn-cancelar').style.display = "inline-block";
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        else{
+            alert("Erro ao buscar dados do equipamento.");
+        }
+    }
+
+    catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Não foi possível conectar ao servidor.");
+    }
+}
+
+// limpar o formulário e resetar o modo de edição
+const limparFormulario = () => {
+   
+    document.querySelector('#cadastro-form').reset();
+    
+    document.querySelector('#equipamento-id').value = '';
+    
+    document.querySelector('#btn-salvar').innerText = "Salvar";
+    
+    // Esconde novamente o botão cancelar
+    document.querySelector('#btn-cancelar').style.display = "none";
+}
+
+
 getEquipamentos();

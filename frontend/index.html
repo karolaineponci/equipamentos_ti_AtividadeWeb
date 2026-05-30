@@ -36,11 +36,11 @@
         <h2>Cadastrar / Editar equipamentos</h2>
 
         <form id="form-cadastro" onsubmit="salvarEquipmaneto(event)">
-            <input type="hidden" id="cad-equipamento">
+            <input type="hidden" id="equipamento-id">
 
-            <input type="text" id="cad-nome" placeholder="Nome do Equipamento" required>
+            <input type="text" id="cadastro-nome" placeholder="Nome do Equipamento" required>
 
-            <select id="cad-tipo">
+            <select id="cadastro-tipo">
                 <option value=""> - Selecione o Tipo - </option>
                 <option value="notebook">Notebook</option>
                 <option value="projetor">Projetor</option>
@@ -49,14 +49,14 @@
                 <option value="monitor">Monitor</option>
             </select>
 
-            <select id="cad-status">
+            <select id="cadastro-status">
                 <option value=""> - Selecione o Status - </option>
                 <option value="emprestado">Emprestado</option>
                 <option value="disponivel">Disponível</option>
                 <option value="manutencao">Em Manutenção</option>
             </select>
 
-            <input type="text" id="cad-descricao" placeholder="Descrição (Opcional)" />
+            <input type="text" id="cadastro-descricao" placeholder="Descrição (Opcional)" />
 
             <button type="submit" id="btn-salvar">Salvar</button>
             <button type="button" id="btn-cancelar" onclick="limparFormulario()" style="display: none; background-color: #555;">Cancelar</button>
