@@ -34,4 +34,30 @@ const getEquipamentos = async () => {
         tbody.appendChild(tr);
     }
 }
+
+// fução deletar equipamentos
+const deletarEquipamento = async (id) => {
+    const confirmou = confirm ("Deseja realmente excluir?");
+
+    if (!confirmou) return;
+
+    try {
+        const response = await fetch(`http://localhost:3000/equipamentos/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.status === 204){
+            alert("Equipamento excluído com sucesso!");
+
+            getEquipamentos();
+        }
+        else{
+            alert("Erro ao tentar excluir o equipamento.")
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Não foi possível conectar ao servidor.");
+    }
+}
+
 getEquipamentos();
