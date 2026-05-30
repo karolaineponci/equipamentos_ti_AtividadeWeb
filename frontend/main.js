@@ -94,7 +94,7 @@ const preencherFormulario = async (id) => {
 // limpar o formulário e resetar o modo de edição
 const limparFormulario = () => {
    
-    document.querySelector('#cadastro-form').reset();
+    document.querySelector('#form-cadastro').reset();
     
     document.querySelector('#equipamento-id').value = '';
     
@@ -104,5 +104,58 @@ const limparFormulario = () => {
     document.querySelector('#btn-cancelar').style.display = "none";
 }
 
+// F botão salvar criar/editar 
+const salvarEquipamento = async (event) => {
+    event.preventDefault(); // Bloqueia o recarregamento automático da página que o form faz por padrão
+
+    //saber se é cadastro ou estição
+    const id = document.querySelector('#equipamento-id').value;
+
+    const dadosEquipamento = {
+        nome: document.querySelector('#cadastro-nome').value,
+        tipo: document.querySelector('#cadastro-tipo').value,
+        status: document.querySelector('#cadastro-status').value,
+        descricao: document.querySelector('#cadastro-descricao').value
+    };
+
+    let url = 'http://localhost:3000/equipamentos';
+    let metodo = 'POST'; // Por padrão, assume que é um cadastro novo
+
+    // Se o ID não estiver vazio, muda a rota e o método para Edição (PUT)
+    if (id !== '') {
+        url = `http://localhost:3000/equipamentos/${id}`;
+        metodo = 'PUT';
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: metodo,
+            headers: {
+                'Content-Type': 'application/json' // Avisa o servidor que estamos mandando JSON
+            },
+            body: JSON.stringify(dadosEquipamento) // Transforma o objeto JS em texto JSON
+        });
+
+        if (response.ok){
+            if (metodo === 'POST') {
+                alert("Equipamento cadastrado com sucesso!");
+            } else {
+                alert("Equipamento atualizado com sucesso!");
+            }
+
+            limparFormulario();
+
+            getEquipamentos();
+        }
+        else{
+            // Caso o backend devolva algum erro de validação (como falta de campos)
+            const erro = await response.json();
+                alert(`Erro do servidor: ${erro.mensagem}`);
+        }
+    } catch (error) {
+        console.error("Erro de requisição:", error);
+        alert("Não foi possível conectar ao servidor.");
+    }
+}
 
 getEquipamentos();
